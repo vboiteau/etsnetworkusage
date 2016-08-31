@@ -26,11 +26,11 @@ def getUsage(type,phase,room):
 	if type == "left":
 		return "{:0.2f}GB".format(data["left"])
 	if type == "usage":
-		return "{:0.2f}GB".format(data["usage"]/1024)
+		return "{:0.2f}GB".format(data["usage"])
         if type == "json":
             return api.getData(phase,room,datetime.now().month)
         if type =="all":
-		return "Used :\t\t{:0.2f}GB ({:0.2f}%)\nLeft :\t\t{:0.2f}GB ({:0.2f}%)\nTotal :\t\t{:0.2f}GB".format(data["usage"]/1024,pct,data["left"],100-pct,data["maximum"]/1024)
+		return "Used :\t\t{:0.2f}GB ({:0.2f}%)\nLeft :\t\t{:0.2f}GB ({:0.2f}%)\nTotal :\t\t{:0.2f}GB".format(data["usage"],pct,data["left"],100-pct,data["maximum"])
 	raise Exception('Must choose between "percent" and "left" ')	
 
 
