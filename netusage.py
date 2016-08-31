@@ -9,7 +9,6 @@ import re
 import sys
 from datetime import datetime
 import api
-import simplejson as json
 
 def getUsage(type,phase,room):
 	""" 	type 	- percent 	-> 	percentage of your bandwidth used
@@ -20,7 +19,6 @@ def getUsage(type,phase,room):
 			room	must be an existing room in the block
 	"""
 
-	dthandler = lambda obj: obj.isoformat() if isinstance(obj, datetime.datetime) else None
 	data = api.getDataObject(phase,room,datetime.now().month)
         pct = (data["maximum"]-data["left"])*100/data["maximum"]
 	if type == "percent":
