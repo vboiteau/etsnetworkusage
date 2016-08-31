@@ -9,6 +9,7 @@ import re
 import sys
 from datetime import datetime
 import api
+import simplejson as json
 
 def getUsage(type,phase,room):
 	""" 	type 	- percent 	-> 	percentage of your bandwidth used
@@ -19,16 +20,19 @@ def getUsage(type,phase,room):
 			room	must be an existing room in the block
 	"""
 
-	return api.getData(phase,room,datetime.now().month)
-
+	dthandler = lambda obj: obj.isoformat() if isinstance(obj, datetime.datetime) else None
+	data = api.getDataObject(phase,room,datetime.now().month)
+        pct = (data["maximum"]-data["left"])*100/data["maximum"]
 	if type == "percent":
 		return "{:0.2f}%".format(pct)
 	if type == "left":
-		return "{:0.2f}GB".format(left)
-	if type =="usage":
-		return "{:0.2f}GB".format(usage/1024)
-	if type =="all":
-		return "Used :\t\t{:0.2f}GB ({:0.2f}%)\nLeft :\t\t{:0.2f}GB ({:0.2f}%)\nTotal :\t\t{:0.2f}GB".format(usage/1024,pct,left,100-pct,max/1024)
+		return "{:0.2f}GB".format(data["left"])
+	if type == "usage":
+		return "{:0.2f}GB".format(data["usage"]/1024)
+        if type == "json":
+            return api.getData(phase,room,datetime.now().month)
+        if type =="all":
+		return "Used :\t\t{:0.2f}GB ({:0.2f}%)\nLeft :\t\t{:0.2f}GB ({:0.2f}%)\nTotal :\t\t{:0.2f}GB".format(data["usage"]/1024,pct,data["left"],100-pct,data["maximum"]/1024)
 	raise Exception('Must choose between "percent" and "left" ')	
 
 

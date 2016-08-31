@@ -4,7 +4,7 @@ import simplejson as json
 import time
 import datetime
 
-def getData(phase,room,month):
+def getDataObject(phase,room,month):
 
 	regexRowUsage = '<TR><TD>(.*)</TD><TD>(.*)</TD><TD ALIGN="RIGHT">(.*)</TD><TD ALIGN="RIGHT">(.*)</TD></TR>'
 	regexUsage = '<TR><TD COLSPAN="3"><B>Total combin&eacute;:</B></TD><TD ALIGN="RIGHT">(.*)</TD></TR>'
@@ -56,5 +56,9 @@ def getData(phase,room,month):
 	data['left']=left
 	data['maximum']=maximum
 
-	dthandler = lambda obj: obj.isoformat() if isinstance(obj, datetime.datetime) else None
-	return json.dumps(data,default=dthandler)
+	return data
+
+def getData(phase,room,month):
+    data = getDataObject(phase,room,month)
+    dthandler = lambda obj: obj.isoformat() if isinstance(obj, datetime.datetime) else None
+    return json.dumps(data,default=dthandler)
